@@ -19,8 +19,11 @@
  *    'Tue, 26 Jan 2016 13:48:02 GMT' => Date()
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
-function parseDataFromRfc2822(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromRfc2822(value) {
+  if (value === undefined) {
+    throw new Error('Not implemented');
+  }
+  return Date.parse(value);
 }
 
 /**
@@ -34,8 +37,11 @@ function parseDataFromRfc2822(/* value */) {
  *    '2016-01-19T16:07:37+00:00'    => Date()
  *    '2016-01-19T08:07:37Z' => Date()
  */
-function parseDataFromIso8601(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromIso8601(value) {
+  if (value === undefined) {
+    throw new Error('Not implemented');
+  }
+  return Date.parse(value);
 }
 
 
@@ -75,6 +81,12 @@ function isLeapYear(/* date */) {
  */
 function timeSpanToString(/* startDate, endDate */) {
   throw new Error('Not implemented');
+  // if (startDate === undefined || endDate === undefined) {
+  //   throw new Error('Not implemented');
+  // }
+  // const myDate = new Date(endDate - startDate);
+  // eslint-disable-next-line max-len
+  // return `${myDate.getUTCHours()}:${myDate.getUTCMinutes()}:${myDate.getUTCSeconds()}0.${myDate.getUTCMilliseconds()}00`;
 }
 
 
