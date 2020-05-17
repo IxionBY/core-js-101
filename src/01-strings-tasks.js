@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-plusplus */
 /* *******************************************************************************************
  *                                                                                           *
  * Plese read the following tutorial before implementing tasks:                              *
@@ -207,8 +209,31 @@ function extractEmails(str) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(/* width, height */) {
-  throw new Error('Not implemented');
+function getRectangleString(width, height) {
+  const cornerTopCharRight = '┐';
+  const cornerTopCharLeft = '┌';
+  const cornerBotCharRight = '┘';
+  const cornerBotCharLeft = '└';
+  const horizontalChar = '─';
+  const verticalChar = '│';
+  const innerChar = ' ';
+  const breakChar = '\n';
+
+  let str = '';
+
+  for (let h = 1; h <= height; h++) {
+    switch (h) {
+      case 1:
+        str += cornerTopCharLeft + horizontalChar.repeat(width - 2) + cornerTopCharRight + breakChar;
+        break;
+      case height:
+        str += cornerBotCharLeft + horizontalChar.repeat(width - 2) + cornerBotCharRight + breakChar;
+        break;
+      default:
+        str += verticalChar + innerChar.repeat(width - 2) + verticalChar + breakChar;
+    }
+  }
+  return str;
 }
 
 

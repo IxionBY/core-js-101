@@ -121,8 +121,9 @@ function getLinearEquationRoot(a, b) {
  *   (0,1) (0,1)     => 0
  *   (0,1) (1,2)     => 0
  */
-function getAngleBetweenVectors(/* x1, y1, x2, y2 */) {
-  throw new Error('Not implemented');
+function getAngleBetweenVectors(x1, y1, x2, y2) {
+  const del = (Math.sqrt(x1 ** 2 + y1 ** 2) * Math.sqrt(x2 ** 2 + y2 ** 2));
+  return Math.acos((x1 * x2 + y1 * y2) / del);
 }
 
 /**
@@ -238,9 +239,6 @@ function isPrime(n) {
  *   toNumber(new Number(42), 0) => 42
  */
 function toNumber(value, def) {
-  if (value === undefined || def === undefined) {
-    throw new Error('Not implemented');
-  }
   if (Number.isInteger(+value)) {
     return +value;
   }

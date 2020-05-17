@@ -1,3 +1,9 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-prototype-builtins */
+/* eslint-disable func-names */
+/* eslint-disable new-cap */
+/* eslint-disable no-undef */
 /* ************************************************************************************************
  *                                                                                                *
  * Plese read the following tutorial before implementing tasks:                                   *
@@ -61,8 +67,8 @@ function getJSON(obj) {
  *    const r = fromJSON(Circle.prototype, '{"radius":10}');
  *
  */
-function fromJSON(/* proto, json */) {
-  throw new Error('Not implemented');
+function fromJSON(proto, json) {
+  return Object.setPrototypeOf(JSON.parse(json), proto);
 }
 
 
@@ -120,33 +126,107 @@ function fromJSON(/* proto, json */) {
  *  For more examples see unit tests.
  */
 
+const CSS_SELECTOR_ERRORS = [
+  'Element, id and pseudo-element should not occur more then one time inside the selector',
+  'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element',
+];
+
+function cssSelector(fromCombine) {
+  fromCombine = fromCombine || '';
+
+  const values = {
+    element: '',
+    id: '',
+    class: '',
+    attr: '',
+    pseudoClass: '',
+    pseudoElement: '',
+  };
+
+  function checkOrder(currentPart) {
+    let b = false;
+    for (const i in values) {
+      if (values.hasOwnProperty(i)) {
+        if (b && values[i]) throw new Error(CSS_SELECTOR_ERRORS[1]);
+        else if (!b && i === currentPart) b = true;
+      }
+    }
+  }
+
+  this.element = function (value) {
+    if (values.element) throw new Error(CSS_SELECTOR_ERRORS[0]);
+    checkOrder('element');
+    values.element = value;
+    return this;
+  };
+
+  this.id = function (value) {
+    if (values.id) throw new Error(CSS_SELECTOR_ERRORS[0]);
+    checkOrder('id');
+    values.id = `#${value}`;
+    return this;
+  };
+
+  this.class = function (value) {
+    checkOrder('class');
+    values.class += `.${value}`;
+    return this;
+  };
+
+  this.attr = function (value) {
+    checkOrder('attr');
+    values.attr += `[${value}]`;
+    return this;
+  };
+
+  this.pseudoClass = function (value) {
+    checkOrder('pseudoClass');
+    values.pseudoClass += `:${value}`;
+    return this;
+  };
+
+  this.pseudoElement = function (value) {
+    if (values.pseudoElement) throw new Error(CSS_SELECTOR_ERRORS[0]);
+    checkOrder('pseudoElement');
+    values.pseudoElement = `::${value}`;
+    return this;
+  };
+
+  this.stringify = function () {
+    let result = '';
+    for (const i in values) if (values.hasOwnProperty(i)) result += values[i];
+    return fromCombine + result;
+  };
+}
+
 const cssSelectorBuilder = {
-  element(/* value */) {
-    throw new Error('Not implemented');
+
+  element(value) {
+    return new cssSelector().element(value);
   },
 
-  id(/* value */) {
-    throw new Error('Not implemented');
+  id(value) {
+    return new cssSelector().id(value);
   },
 
-  class(/* value */) {
-    throw new Error('Not implemented');
+  class(value) {
+    return new cssSelector().class(value);
   },
 
-  attr(/* value */) {
-    throw new Error('Not implemented');
+  attr(value) {
+    return new cssSelector().attr(value);
   },
 
-  pseudoClass(/* value */) {
-    throw new Error('Not implemented');
+  pseudoClass(value) {
+    return new cssSelector().pseudoClass(value);
   },
 
-  pseudoElement(/* value */) {
-    throw new Error('Not implemented');
+  pseudoElement(value) {
+    return new cssSelector().pseudoElement(value);
   },
 
-  combine(/* selector1, combinator, selector2 */) {
-    throw new Error('Not implemented');
+  combine(selector1, combinator, selector2) {
+    return new cssSelector(`${selector1.stringify()} ${combinator} ${selector2.stringify()}`);
   },
 };
 
